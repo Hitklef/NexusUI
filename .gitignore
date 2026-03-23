@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/web.slnx
+/.vs/slnx.sqlite
+/.vs/slnx.sqlite
+/.vs/slnx.sqlite
+*.sqlite-journal
