@@ -1,0 +1,60 @@
+<section class="page container-fluid px-0">
+  <div class="hero-card hero-card--wide">
+    <div class="hero-copy">
+      <div class="eyebrow">
+        <i class="bi bi-house-heart-fill"></i>
+        Home
+      </div>
+      <h1>Вітаю, {{ userName() }}</h1>
+      <p>
+        Тут стартова робоча область, а не продовження меню: окремі картки доменів, метрики і швидкий перехід до API Console.
+      </p>
+
+      <div class="hero-actions">
+        <a class="btn btn-primary" routerLink="/api"><i class="bi bi-terminal"></i>Відкрити API Console</a>
+        <a class="btn btn-outline-secondary" routerLink="/api"><i class="bi bi-lightning-charge"></i>Швидкий тест</a>
+      </div>
+    </div>
+
+    <div class="hero-metrics">
+      <div class="stat-card">
+        <span class="stat-card__value">{{ endpointCount }}</span>
+        <span class="stat-card__label">Підключених endpoint cards</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__value">{{ endpointGroups.length }}</span>
+        <span class="stat-card__label">Основні API області</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    @for (group of endpointGroups; track group.id) {
+      <div class="col-12 col-md-6 col-xl-4">
+        <article class="panel stat-panel h-100">
+          <div class="eyebrow">
+            <app-icon [name]="group.icon" [size]="1" />
+            {{ group.title }}
+          </div>
+          <h2>{{ group.title }}</h2>
+          <p>{{ group.description }}</p>
+          <div class="stat-panel__footer">
+            <span class="subtle-badge">{{ group.endpoints.length }} methods</span>
+            <a class="text-link" routerLink="/api">Open explorer</a>
+          </div>
+        </article>
+      </div>
+    }
+  </div>
+
+  <section class="panel info-panel">
+    <div class="d-flex flex-column gap-2">
+      <div class="eyebrow">
+        <i class="bi bi-diagram-3-fill"></i>
+        Dev Environment
+      </div>
+      <h2>Поточне підключення</h2>
+      <p>В development веб надсилає запити на `/api`, а proxy перенаправляє їх на `https://localhost:7235`.</p>
+    </div>
+  </section>
+</section>

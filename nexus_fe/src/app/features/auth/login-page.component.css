@@ -1,0 +1,52 @@
+.auth-page {
+  min-height: 100vh;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-page__backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top left, rgba(26, 188, 156, 0.18), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(255, 140, 66, 0.18), transparent 30%);
+  pointer-events: none;
+}
+
+.auth-page__content {
+  width: min(1240px, 100%);
+  position: relative;
+  z-index: 1;
+}
+
+.promo-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.promo-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.promo-item i {
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  color: var(--accent);
+}
+
+@media (max-width: 900px) {
+  .auth-page__content {
+    width: 100%;
+  }
+}

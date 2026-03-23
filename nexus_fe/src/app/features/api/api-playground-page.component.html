@@ -1,0 +1,86 @@
+<section class="page container-fluid px-0">
+  <div class="hero-card hero-card--wide">
+    <div class="hero-copy">
+      <div class="eyebrow">
+        <i class="bi bi-braces-asterisk"></i>
+        API Console
+      </div>
+      <h1>Всі доступні API-ендпоінти в одному UI</h1>
+      <p>
+        На сторінці зібрані всі методи з `AuthController`, `UsersController` та `StoresController`.
+        У dev фронт ходить на `/api`, а Angular proxy пересилає запити на `https://localhost:7235`.
+      </p>
+    </div>
+
+    <div class="hero-metrics">
+      <div class="stat-card">
+        <span class="stat-card__value">{{ endpointCount }}</span>
+        <span class="stat-card__label">Підключених методів</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-card__value">3</span>
+        <span class="stat-card__label">Доменні групи</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="panel">
+    <div class="row g-3 align-items-end">
+      <div class="col-12 col-xl-6">
+        <label class="field-shell">
+          <span class="field-label">Пошук по методах</span>
+          <div class="input-group">
+            <span class="input-group-text bg-transparent border-end-0 text-body-secondary"><i class="bi bi-search"></i></span>
+            <input
+              class="field-control form-control border-start-0"
+              type="text"
+              placeholder="Наприклад: reset password або /stores"
+              (input)="query.set($any($event.target).value)"
+            />
+          </div>
+        </label>
+      </div>
+
+      <div class="col-12 col-xl-6">
+        <div class="filter-chips">
+          <button class="chip-btn" [class.is-active]="activeGroup() === 'all'" type="button" (click)="setFilter('all')">Всі</button>
+          @for (group of endpointGroups; track group.id) {
+            <button class="chip-btn" [class.is-active]="activeGroup() === group.id" type="button" (click)="setFilter(group.id)">
+              {{ group.title }}
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  @for (group of visibleGroups(); track group.id) {
+    <section class="stack-section">
+      <header class="section-header">
+        <div>
+          <div class="eyebrow">
+            <app-icon [name]="group.icon" [size]="1" />
+            {{ group.title }}
+          </div>
+          <h2>{{ group.title }} Endpoints</h2>
+          <p>{{ group.description }}</p>
+        </div>
+        <span class="subtle-badge">{{ group.endpoints.length }} methods</span>
+      </header>
+
+      <div class="endpoint-grid">
+        @for (endpoint of group.endpoints; track endpoint.id) {
+          <app-endpoint-card [endpoint]="endpoint" />
+        }
+      </div>
+    </section>
+  } @empty {
+    <section class="panel empty-state">
+      <app-icon name="spark" [size]="1.4" />
+      <div>
+        <h3>Нічого не знайдено</h3>
+        <p>Спробуй інший пошуковий запит або поверни фільтр у режим "Всі".</p>
+      </div>
+    </section>
+  }
+</section>

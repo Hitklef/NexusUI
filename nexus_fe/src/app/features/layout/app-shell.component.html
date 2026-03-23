@@ -1,0 +1,71 @@
+<div class="shell">
+  <aside class="shell-sidebar" [class.is-open]="sidebarOpen()">
+    <div class="shell-brand mb-4">
+      <div class="shell-brand__mark">
+        <i class="bi bi-stars fs-5"></i>
+      </div>
+      <div>
+        <strong>Nexus Console</strong>
+        <span>Admin workspace</span>
+      </div>
+    </div>
+
+    <div class="small text-uppercase text-secondary-emphasis fw-semibold mb-2 shell-sidebar__label">Navigation</div>
+
+    <nav class="shell-nav nav nav-pills flex-column gap-2">
+      @for (item of navItems; track item.path) {
+        <a
+          class="shell-nav__link nav-link"
+          [routerLink]="item.path"
+          routerLinkActive="is-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          (click)="closeSidebar()"
+        >
+          <i class="bi" [class]="item.icon"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <div class="shell-sidebar__footer">
+      <button class="btn btn-outline-secondary btn-icon" type="button" (click)="theme.toggleTheme()">
+        <i class="bi" [class.bi-sun-fill]="theme.theme() === 'dark'" [class.bi-moon-stars-fill]="theme.theme() !== 'dark'"></i>
+        {{ theme.theme() === 'dark' ? 'Light mode' : 'Dark mode' }}
+      </button>
+
+      <button class="btn btn-outline-secondary btn-icon" type="button" (click)="logout()">
+        <i class="bi bi-box-arrow-right"></i>
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <div class="shell-overlay" [class.is-open]="sidebarOpen()" (click)="closeSidebar()"></div>
+
+  <main class="shell-main">
+    <header class="shell-topbar navbar navbar-expand-lg">
+      <div class="container-fluid px-0">
+        <button class="btn btn-outline-secondary btn-icon shell-topbar__menu" type="button" (click)="toggleSidebar()">
+          <i class="bi bi-list"></i>
+          Menu
+        </button>
+
+        <div class="d-flex align-items-center gap-2 ms-auto">
+          <span class="subtle-badge">Dev API via proxy</span>
+
+          <div class="shell-user">
+            <div class="shell-user__avatar">{{ userInitials() }}</div>
+            <div>
+              <strong>{{ userName() }}</strong>
+              <span>{{ userRole() }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="shell-content">
+      <router-outlet />
+    </div>
+  </main>
+</div>

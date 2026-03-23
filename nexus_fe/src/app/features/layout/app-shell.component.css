@@ -1,0 +1,63 @@
+.shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 18.5rem minmax(0, 1fr);
+  gap: 0;
+}
+
+.shell-sidebar {
+  width: 100%;
+}
+
+.shell-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.shell-main {
+  min-width: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 20%);
+}
+
+.shell-topbar__menu {
+  display: none;
+}
+
+@media (max-width: 960px) {
+  .shell {
+    grid-template-columns: 1fr;
+  }
+
+  .shell-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: min(18rem, 86vw);
+    transform: translateX(-100%);
+    transition: transform 180ms ease;
+    z-index: 30;
+  }
+
+  .shell-sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .shell-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(7, 10, 16, 0.58);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 180ms ease;
+    z-index: 20;
+  }
+
+  .shell-overlay.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .shell-topbar__menu {
+    display: inline-flex;
+  }
+}

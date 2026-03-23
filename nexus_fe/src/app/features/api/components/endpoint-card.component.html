@@ -1,0 +1,107 @@
+<article class="panel endpoint-card h-100">
+  <header class="endpoint-card__header d-flex flex-column gap-3">
+    <div class="d-flex flex-wrap gap-2">
+      <span class="method-badge" [attr.data-method]="endpoint().method">{{ endpoint().method }}</span>
+      <span class="subtle-badge">{{ endpoint().accessLevel }}</span>
+    </div>
+    <div class="d-flex flex-column gap-2">
+      <h3>{{ endpoint().title }}</h3>
+      <p>{{ endpoint().description }}</p>
+      <code class="endpoint-path">{{ endpoint().path }}</code>
+    </div>
+  </header>
+
+  <form class="endpoint-card__form d-flex flex-column gap-3" [formGroup]="form" (ngSubmit)="run()">
+    @if (hasFields()) {
+      <div class="row g-3">
+        @for (field of pathFields(); track field.key) {
+          <label class="field-shell col-12 col-md-6" [attr.for]="fieldId(field.key)">
+            <span class="field-label">{{ field.label }} @if (field.required) {<strong>*</strong>}</span>
+            <input
+              [id]="fieldId(field.key)"
+              class="field-control form-control"
+              [type]="inputType(field)"
+              [placeholder]="field.placeholder ?? ''"
+              [formControlName]="field.key"
+            />
+            @if (controlInvalid(field.key)) {
+              <span class="field-error">Provide a valid value.</span>
+            }
+          </label>
+        }
+
+        @for (field of bodyFields(); track field.key) {
+          @if (field.kind === 'boolean') {
+            <label class="toggle-row col-12">
+              <input class="form-check-input mt-0" type="checkbox" [formControlName]="field.key" />
+              <span>
+                <span class="field-label">{{ field.label }}</span>
+                <small>{{ field.hint ?? 'Boolean request flag' }}</small>
+              </span>
+            </label>
+          } @else if (field.kind === 'select') {
+            <label class="field-shell col-12 col-md-6" [attr.for]="fieldId(field.key)">
+              <span class="field-label">{{ field.label }} @if (field.required) {<strong>*</strong>}</span>
+              <select [id]="fieldId(field.key)" class="field-control form-select" [formControlName]="field.key">
+                @for (option of field.options ?? []; track option.label) {
+                  <option [value]="option.value">{{ option.label }}</option>
+                }
+              </select>
+            </label>
+          } @else {
+            <label class="field-shell col-12 col-md-6" [attr.for]="fieldId(field.key)">
+              <span class="field-label">{{ field.label }} @if (field.required) {<strong>*</strong>}</span>
+              <input
+                [id]="fieldId(field.key)"
+                class="field-control form-control"
+                [type]="inputType(field)"
+                [placeholder]="field.placeholder ?? ''"
+                [formControlName]="field.key"
+              />
+              @if (field.hint) {
+                <small>{{ field.hint }}</small>
+              }
+              @if (controlInvalid(field.key)) {
+                <span class="field-error">Provide a valid value.</span>
+              }
+            </label>
+          }
+        }
+      </div>
+    } @else {
+      <p class="inline-note">This endpoint does not require any path params or request body.</p>
+    }
+
+    <div class="endpoint-card__actions">
+      <button class="btn btn-primary" type="submit" [disabled]="isRunning()">
+        <i class="bi bi-play-circle"></i>
+        {{ isRunning() ? 'Calling...' : 'Run Request' }}
+      </button>
+      <button class="btn btn-outline-secondary" type="button" (click)="reset()">
+        <i class="bi bi-arrow-counterclockwise"></i>
+        Reset
+      </button>
+    </div>
+  </form>
+
+  <section class="endpoint-card__response">
+    <div class="response-meta">
+      <div>
+        <span class="mini-label">Request preview</span>
+        <pre class="data-pre">{{ requestPreview() }}</pre>
+      </div>
+      <div class="response-status">
+        <span class="mini-label">Latest response</span>
+        @if (result(); as apiResult) {
+          <span class="status-pill" [attr.data-tone]="statusTone()">
+            {{ apiResult.status }} · {{ apiResult.durationMs }} ms
+          </span>
+        } @else {
+          <span class="status-pill" data-tone="idle">No response yet</span>
+        }
+      </div>
+    </div>
+
+    <pre class="data-pre">{{ resultJson() }}</pre>
+  </section>
+</article>
